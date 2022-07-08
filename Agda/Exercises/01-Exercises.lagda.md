@@ -40,7 +40,10 @@ the leftmost argument only.
 
 ```agda
 _&&'_ : Bool → Bool → Bool
-a &&' b = {!!}
+true &&' true = true
+true &&' false = false
+false &&' true = false
+false &&' false =  false
 ```
 
 One advantage of this definition is that it reads just like a Boolean truth
