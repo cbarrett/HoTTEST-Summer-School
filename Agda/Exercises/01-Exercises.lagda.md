@@ -40,10 +40,10 @@ the leftmost argument only.
 
 ```agda
 _&&'_ : Bool → Bool → Bool
-true &&' true = true
-true &&' false = false
-false &&' true = false
-false &&' false =  false
+true  &&' true  = true
+true  &&' false = false
+false &&' true  = false
+false &&' false = false
 ```
 
 One advantage of this definition is that it reads just like a Boolean truth
@@ -57,7 +57,8 @@ verbose definition.
 
 ```agda
 _xor_ : Bool → Bool → Bool
-a xor b = {!!}
+true xor b = not b
+false xor b = b
 ```
 
 ### Exercise 3 (★)
