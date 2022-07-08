@@ -71,16 +71,18 @@ left hand side and the right hand side compute to the same value.
 
 ```agda
 _^_ : ℕ → ℕ → ℕ
-n ^ m = {!!}
+n ^ zero = 1
+n ^ suc m = n * (n ^ m)
 
 ^-example : 3 ^ 4 ≡ 81
-^-example = {!!} -- refl 81 should fill the hole here
+^-example = refl 81 -- refl 81 should fill the hole here
 
 _! : ℕ → ℕ
-n ! = {!!}
+zero ! = 1
+n@(suc m) ! =  n * (m !)
 
 !-example : 4 ! ≡ 24
-!-example = {!!} -- refl 24 should fill the hole here
+!-example =  refl 24 -- refl 24 should fill the hole here
 ```
 
 ### Exercise 4 (★)
