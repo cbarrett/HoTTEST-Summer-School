@@ -164,7 +164,10 @@ are the same natural number, or else is empty, if `x` and `y` are different.
 
 ```agda
 _≣_ : Bool → Bool → Type
-a ≣ b = {!!}
+true  ≣ true  = 𝟙
+true  ≣ false = 𝟘
+false ≣ true  = 𝟘
+false ≣ false = 𝟙
 ```
 
 ### Exercise 2 (★)
