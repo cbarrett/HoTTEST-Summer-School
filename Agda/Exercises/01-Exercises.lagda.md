@@ -118,10 +118,11 @@ element of the list `xs` and returns the resulting list.
 
 ```agda
 map : {X Y : Type} → (X → Y) → List X → List Y
-map f xs = {!!}
+map f [] = []
+map f (x :: xs) = f x :: map f xs
 
 map-example : map (_+ 3) (1 :: 2 :: 3 :: []) ≡ 4 :: 5 :: 6 :: []
-map-example = {!!} -- refl _ should fill the hole here
+map-example =  refl _ -- refl _ should fill the hole here
 
                    -- We write the underscore, because we don't wish to repeat
                    -- the relatively long "4 :: 5 :: 6 :: []" and Agda can
