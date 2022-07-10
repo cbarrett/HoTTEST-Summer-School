@@ -191,10 +191,11 @@ back and forth between `a ≣ b` and `a ≡ b`.
 
 ```agda
 ≡-to-≣ : (a b : Bool) → a ≡ b → a ≣ b
-≡-to-≣ = {!!}
+≡-to-≣ x x (refl x) = Bool-refl x
 
 ≣-to-≡ : (a b : Bool) → a ≣ b → a ≡ b
-≣-to-≡ = {!!}
+≣-to-≡ true  true  p = refl true
+≣-to-≡ false false p = refl false
 ```
 
 ## Part III: Proving in Agda (★★/★★★)
