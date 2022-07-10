@@ -176,7 +176,8 @@ false ≣ false = 𝟙
 
 ```agda
 Bool-refl : (b : Bool) → b ≣ b
-Bool-refl = {!!}
+Bool-refl true  = ⋆
+Bool-refl false = ⋆
 ```
 
 ### Exercise 3 (★★)
