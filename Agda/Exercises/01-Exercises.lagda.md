@@ -99,10 +99,12 @@ max (suc n) (suc m) = suc (max n m)
 
 ```agda
 min : ℕ → ℕ → ℕ
-min = {!!}
+min zero    m       = zero
+min (suc n) zero    = zero
+min (suc n) (suc m) = suc (min n m)
 
 min-example : min 5 3 ≡ 3
-min-example = {!!} -- refl 3 should fill the hole here
+min-example = refl 3 -- refl 3 should fill the hole here
 ```
 
 ### Exercise 5 (★)
