@@ -228,8 +228,11 @@ Taking inspiration from the above, try to **state** and **prove** that `&&` is
 commutative.
 
 ```agda
-&&-is-commutative : {!!}
-&&-is-commutative = {!!}
+&&-is-commutative : (a b : Bool) → a && b ≡ b && a
+&&-is-commutative true  true  = refl true
+&&-is-commutative true  false = refl false
+&&-is-commutative false true  = refl false
+&&-is-commutative false false = refl false
 ```
 
 ### Exercise 3 (★★)
