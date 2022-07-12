@@ -215,14 +215,10 @@ not-is-involution false = refl false
 Use pattern matching to **prove** that `||` is commutative.
 
 ```agda
-
-||-short-circuit : (a : Bool) → a || true ≡ true
-||-short-circuit true = refl true
-||-short-circuit false = refl true
-
 ||-is-commutative : (a b : Bool) → a || b ≡ b || a
-||-is-commutative true b = sym (||-short-circuit b)
-||-is-commutative a true = ||-short-circuit a
+||-is-commutative true  true  = refl true
+||-is-commutative true  false = refl true
+||-is-commutative false true  = refl true
 ||-is-commutative false false = refl false
 ```
 
