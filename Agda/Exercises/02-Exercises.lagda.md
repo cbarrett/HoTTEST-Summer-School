@@ -116,7 +116,7 @@ In the lecture we have discussed that we can't  prove `∀ {A : Type} → ¬¬ A
 What you can prove however, is
 ```agda
 tne : ∀ {A : Type} → ¬¬¬ A → ¬ A
-tne = {!!}
+tne nnna = λ ha → nnna λ hna → hna ha
 ```
 
 
