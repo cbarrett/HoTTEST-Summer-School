@@ -241,14 +241,25 @@ commutative.
 
 ```agda
 &&-is-associative : (a b c : Bool) → a && (b && c) ≡ (a && b) && c
-&&-is-associative = {!!}
+&&-is-associative true b c = refl (b && c)
+&&-is-associative false b c = refl false
 
 &&'-is-associative : (a b c : Bool) → a &&' (b &&' c) ≡ (a &&' b) &&' c
-&&'-is-associative = {!!}
+&&'-is-associative true true true = refl true
+&&'-is-associative true true false = refl false
+&&'-is-associative true false true = refl false
+&&'-is-associative true false false = refl false
+&&'-is-associative false true true = refl false
+&&'-is-associative false true false = refl false
+&&'-is-associative false false true = refl false
+&&'-is-associative false false false = refl false
 ```
 
 **Question**: Can you spot a downside of the more verbose definition of `&&'`
   now?
+
+Yes, it requires pattern matching on all three arguments, since both appear as either
+the right hand or left hand side of `&&'`. Whereas in the other defn, case splitting on a is enough, since it appears only on the left hand side of `&&`.
 
 ### Exercise 4 (★★★)
 
