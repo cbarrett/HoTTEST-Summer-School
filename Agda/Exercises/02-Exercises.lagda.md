@@ -43,44 +43,60 @@ curry f = λ x y → f (x , y)
 You might know these functions from programming e.g. in Haskell.
 But what do they say under the propositions-as-types interpretation?
 
+A: It's the famous tensor-hom adjunction. Or, in propositions-as-types, it says that
+assuming A, and then assuming B, we can prove X is the same as assuming A and B,
+in the first place, we can prove X, and vice versa.
 
 ### Exercise 2 (★)
 
 Consider the following goals:
 ```agda
 [i] : {A B C : Type} → (A × B) ∔ C → (A ∔ C) × (B ∔ C)
-[i] = {!!}
+[i] (inl (a , b)) = (inl a , inl b)
+[i] (inr c) = (inr c , inr c)
 
 [ii] : {A B C : Type} → (A ∔ B) × C → (A × C) ∔ (B × C)
-[ii] = {!!}
+[ii] (inl a , c) = inl (a , c)
+[ii] (inr b , c) = inr (b , c)
 
 [iii] : {A B : Type} → ¬ (A ∔ B) → ¬ A × ¬ B
-[iii] = {!!}
+[iii] n = (λ ha → n (inl ha)) , (λ hb → n (inr hb))
 
 [iv] : {A B : Type} → ¬ (A × B) → ¬ A ∔ ¬ B
 [iv] = {!!}
+-- Not possible, we don't know which element of the coproduct to give.
+-- Logically, this means A ^ B implies false does not imply A implies false,
+-- or B implies false, which does seems reasonable, thinking constructively.
 
 [v] : {A B : Type} → (A → B) → ¬ B → ¬ A
-[v] = {!!}
+[v] f nb = λ ha → nb (f ha)
 
 [vi] : {A B : Type} → (¬ A → ¬ B) → B → A
 [vi] = {!!}
+-- Not possible, we only have the assumptions that, if you can prove A implies false,
+-- that you can derive B implies false, and the simple assumption of B. Crucially,
+-- we don't have any way to get an A.
 
 [vii] : {A B : Type} → ((A → B) → A) → A
 [vii] = {!!}
+-- Not possible. We are never given an A, we only have f, which needs us to give it
+-- an A implies B. But we have no way to construct such a term, as there is no way
+-- to get a B from an A given the information we have.
 
 [viii] : {A : Type} {B : A → Type}
     → ¬ (Σ a ꞉ A , B a) → (a : A) → ¬ B a
-[viii] = {!!}
+[viii] n a = λ hb → n (a , hb)
 
 [ix] : {A : Type} {B : A → Type}
     → ¬ ((a : A) → B a) → (Σ a ꞉ A , ¬ B a)
-[ix] = {!!}
+[ix] n = {!!}
+-- Not possible. Just because we know that "forall a, B of a" implies false, that does
+-- not give us any way to find out which `a` (of possibly many) is "the" `a` that fails.
 
 [x] : {A B : Type} {C : A → B → Type}
       → ((a : A) → (Σ b ꞉ B , C a b))
       → Σ f ꞉ (A → B) , ((a : A) → C a (f a))
-[x] = {!!}
+[x] f = (λ a → pr₁ (f a)) , λ a → pr₂ (f a)
 ```
 For each goal determine whether it is provable or not.
 If it is, fill it. If not, explain why it shouldn't be possible.
