@@ -147,7 +147,8 @@ to a true proposition while an uninhabited type corresponds to a false propositi
 With this in mind construct a family
 ```agda
 bool-as-type : Bool → Type
-bool-as-type = {!!}
+bool-as-type true = 𝟙
+bool-as-type false = 𝟘
 ```
 such that `bool-as-type true` corresponds to "true" and
 `bool-as-type false` corresponds to "false". (Hint:
