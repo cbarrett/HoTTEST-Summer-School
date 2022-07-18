@@ -169,10 +169,16 @@ bool-≡-char₁ b .b (refl .b) = id , id
 Using ex. 2, concldude that
 ```agda
 true≢false : ¬ (true ≡ false)
-true≢false = {!!}
+true≢false hp = (pr₁ (bool-≡-char₁ true false hp) ⋆)
 ```
+
 You can actually prove this much easier! How?
 
+```agda
+-- Using Agda's syntax for pattern matching to discharge a contradiction
+true≢false' : ¬ (true ≡ false)
+true≢false' ()
+```
 
 ### Exercise 4 (★★★)
 
