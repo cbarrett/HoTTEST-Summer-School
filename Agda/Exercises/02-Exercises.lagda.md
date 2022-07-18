@@ -160,7 +160,7 @@ we have seen canonical types corresponding true and false in the lectures)
 Prove
 ```agda
 bool-≡-char₁ : ∀ (b b' : Bool) → b ≡ b' → (bool-as-type b ⇔ bool-as-type b')
-bool-≡-char₁ = {!!}
+bool-≡-char₁ b .b (refl .b) = id , id
 ```
 
 
