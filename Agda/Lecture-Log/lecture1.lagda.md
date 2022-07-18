@@ -4,6 +4,7 @@
 module lecture1 where
 
 Type = Set
+Type₁ = Set₁
 
 data Bool : Type where
  true false : Bool
@@ -150,6 +151,8 @@ infix 0 _≣_
 _+_ : ℕ → ℕ → ℕ
 zero  + y = y
 suc x + y = suc (x + y)
+
+infixr 20 _+_
 
 _++_ : {A : Type} → List A → List A → List A
 []        ++ ys = ys

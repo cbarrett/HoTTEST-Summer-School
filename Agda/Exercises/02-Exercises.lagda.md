@@ -40,7 +40,7 @@ uncurry = {!!}
 curry : {A B X : Type} → (A × B → X) → (A → B → X)
 curry = {!!}
 ```
-You might know these from functions from programming e.g. in Haskell.
+You might know these functions from programming e.g. in Haskell.
 But what do they say under the propositions-as-types interpretation?
 
 
@@ -48,10 +48,10 @@ But what do they say under the propositions-as-types interpretation?
 
 Consider the following goals:
 ```agda
-[i] : {A B X : Type} → (A → X) → (B → X) → (A ∔ B → X)
+[i] : {A B C : Type} → (A × B) ∔ C → (A ∔ C) × (B ∔ C)
 [i] = {!!}
 
-[ii] : {A B X : Type} → (X → A) → (X → B) → (X → A × B)
+[ii] : {A B C : Type} → (A ∔ B) × C → (A × C) ∔ (B × C)
 [ii] = {!!}
 
 [iii] : {A B : Type} → ¬ (A ∔ B) → ¬ A × ¬ B
@@ -60,18 +60,27 @@ Consider the following goals:
 [iv] : {A B : Type} → ¬ (A × B) → ¬ A ∔ ¬ B
 [iv] = {!!}
 
-[v] : {A : Type} {B : A → Type}
-    → ¬ (Σ a ꞉ A , B a) → (a : A) → ¬ B a
+[v] : {A B : Type} → (A → B) → ¬ B → ¬ A
 [v] = {!!}
 
-[vi] : {A : Type} {B : A → Type}
-    → ¬ ((a : A) → B a) → (Σ a ꞉ A , ¬ B a)
+[vi] : {A B : Type} → (¬ A → ¬ B) → B → A
 [vi] = {!!}
 
-[vii] : {A B : Type} {C : A → B → Type}
+[vii] : {A B : Type} → ((A → B) → A) → A
+[vii] = {!!}
+
+[viii] : {A : Type} {B : A → Type}
+    → ¬ (Σ a ꞉ A , B a) → (a : A) → ¬ B a
+[viii] = {!!}
+
+[ix] : {A : Type} {B : A → Type}
+    → ¬ ((a : A) → B a) → (Σ a ꞉ A , ¬ B a)
+[ix] = {!!}
+
+[x] : {A B : Type} {C : A → B → Type}
       → ((a : A) → (Σ b ꞉ B , C a b))
       → Σ f ꞉ (A → B) , ((a : A) → C a (f a))
-[vii] = {!!}
+[x] = {!!}
 ```
 For each goal determine whether it is provable or not.
 If it is, fill it. If not, explain why it shouldn't be possible.
@@ -104,7 +113,7 @@ Prove
 ¬¬-kleisli : {A B : Type} → (A → ¬¬ B) → ¬¬ A → ¬¬ B
 ¬¬-kleisli = {!!}
 ```
-Hint: For the second goal use `dne` from the previous exercise
+Hint: For the second goal use `tne` from the previous exercise
 
 
 
@@ -158,11 +167,11 @@ bool-≡-char₂ = {!!}
 
 
 ## Part III (🌶)
-A type `X` is called *discrete* if it has decidable equality.
+A type `A` is called *discrete* if it has decidable equality.
 Consider the following predicate on types:
 ```agda
 has-bool-dec-fct : Type → Type
-has-bool-dec-fct A = Σ {A → A → Bool} (λ f → ∀ x y → x ≡ y ⇔ (f x y) ≡ true)
+has-bool-dec-fct A = Σ f ꞉ (A → A → Bool) , (∀ x y → x ≡ y ⇔ (f x y) ≡ true)
 ```
 Prove that
 ```agda
