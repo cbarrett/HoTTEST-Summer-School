@@ -39,7 +39,7 @@ Try to prove reflexivity, symmetry and transitivity of `_∼_` by filling these 
 
 ## Part II -- Isomorphisms
 
-A function `f : A → B` is called a *bijection* if there is a function `g : B → A` in the opposite direction such that `g ∘ f ∼ id` and `f ∘ g ∼ id`. Recall that `_∼_` is [pointwise equality](identity-type.lagda.md) and that `id` is the [identity function](products.lagda.md). This means that we can convert back and forth between the types `A` and `B` landing at the same element with started with, either from `A` or from `B`. In this case, we say that the types `A` and `B` are *isomorphic*, and we write `A ≅ B`. Bijections are also called type *isomorphisms*. We can define these concepts in Agda using [sum types](sums.lagda.md) or [records](https://agda.readthedocs.io/en/latest/language/record-types.html). We will adopt the latter, but we include both definitions for the sake of illustration.
+A function `f : A → B` is called a *bijection* if there is a function `g : B → A` in the opposite direction such that `g ∘ f ∼ id` and `f ∘ g ∼ id`. Recall that `_∼_` is [pointwise equality](identity-type.lagda.md) and that `id` is the [identity function](products.lagda.md). This means that we can convert back and forth between the types `A` and `B` landing at the same element we started with, either from `A` or from `B`. In this case, we say that the types `A` and `B` are *isomorphic*, and we write `A ≅ B`. Bijections are also called type *isomorphisms*. We can define these concepts in Agda using [sum types](sums.lagda.md) or [records](https://agda.readthedocs.io/en/latest/language/record-types.html). We will adopt the latter, but we include both definitions for the sake of illustration.
 Recall that we [defined](general-notation.lagda.md) the domain of a function `f : A → B` to be `A` and its codomain to be `B`.
 
 We adopt this definition of isomorphisms using records.
@@ -63,7 +63,7 @@ infix 0 _≅_
 ```
 
 ### Exercise 2 (⋆)
-Reforumlate the same definition using Sigma-types.
+Reformulate the same definition using Sigma-types.
 ```agda
 is-bijection' : {A B : Type} → (A → B) → Type
 is-bijection' f = Σ g ꞉ (codomain f → domain f) , ((g ∘ f ∼ id) × (f ∘ g ∼ id))
@@ -277,18 +277,25 @@ is-minimal-element-suc :
   (m : ℕ) (pm : P (suc m))
   (is-lower-bound-m : is-lower-bound (λ x → P (suc x)) m) →
   ¬ (P 0) → is-lower-bound P (suc m)
-is-minimal-element-suc P d m pm is-lower-bound-m neg-p0 0 p0 =
-  𝟘-nondep-elim (neg-p0 p0)
-is-minimal-element-suc
-  P d 0 pm is-lower-bound-m neg-p0 (suc n) psuccn = leq-zero n
-is-minimal-element-suc
-  P d (suc m) pm is-lower-bound-m neg-p0 (suc n) psuccn =
-  is-minimal-element-suc (λ x → P (suc x)) (λ x → d (suc x)) m pm
-    (λ m → is-lower-bound-m (suc m))
-    (is-lower-bound-m 0)
-    (n)
-    (psuccn)
+is-minimal-element-suc P d m pm is-lower-bound-m neg-p0 0 p0 = 𝟘-nondep-elim (neg-p0 p0)
+-- In the previous clause, 𝟘-nondep-elim is superfluous, because neg-p0 p0 : ∅ already.
+is-minimal-element-suc P d 0 pm is-lower-bound-m neg-p0 (suc n) psuccn = ⋆
+is-minimal-element-suc P d (suc m) pm is-lower-bound-m neg-p0 (suc n) psuccn = h
+  where
+    h : suc m ≤₁ n
+    h = is-minimal-element-suc (λ x → P (suc x))
+                               (λ x → d (suc x)) m pm
+                               (λ m → is-lower-bound-m (suc m))
+                               (is-lower-bound-m 0)
+                               (n)
+                               (psuccn)
+    -- alternative solution
+    h' : suc m ≤₁ n
+    h' = is-lower-bound-m n psuccn
 ```
+The lemma states that for a decidable type family `P`, if `m` is a lower bound
+for `P ∘ suc`, and `P 0` is false, then `m + 1` is a lower bound for `P`.
+Note that the assumptions `d` and `pm` are not used.
 
 ### Exercise 10 (🌶)
 
@@ -303,8 +310,19 @@ well-ordering-principle-suc :
   is-decidable (P 0) →
   minimal-element (λ m → P (suc m)) → minimal-element P
 well-ordering-principle-suc P d n p (inl p0) _  = 0 , (p0 , (λ m q → leq-zero m))
-well-ordering-principle-suc P d n p (inr neg-p0) (m , (pm , is-min-m)) = (suc m) , (pm , is-minimal-element-suc P d m pm is-min-m neg-p0)
+well-ordering-principle-suc P d n p (inr neg-p0) (m , (pm , is-min-m)) = (suc m) , (pm , h)
+  where
+    h : is-lower-bound P (suc m)
+    h = is-minimal-element-suc P d m pm is-min-m neg-p0
+
+    -- alternative solution
+    h' : is-lower-bound P (suc m)
+    h' zero q = 𝟘-nondep-elim (neg-p0 q)
+    h' (suc k) q = is-min-m k q
 ```
+This lemma states that for a decidable type family `P`, if `P ∘ suc` is true for some `n`,
+and `P 0` is decidable, then minimal elements of `P ∘ suc` yield minimal elements of `P`.
+Note that `d` and `p` are not used.
 
 ### Exercise 11 (🌶)
 
@@ -315,7 +333,7 @@ well-ordering-principle P d 0 p = 0 , (p , (λ m q → leq-zero m))
 well-ordering-principle P d (suc n) p = well-ordering-principle-suc P d n p (d 0) (well-ordering-principle (λ m → P (suc m)) (λ m → d (suc m)) n p)
 ```
 
-### Exercise 12 (🌶)
+### Exercise 12 (⋆⋆⋆)
 
 Prove that the well-ordering principle returns 0 if `P 0` holds.
 
