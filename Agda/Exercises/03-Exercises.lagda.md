@@ -161,8 +161,8 @@ Fin-elim : (A : {n : ℕ} → Fin n → Type)
 Fin-elim A a f = h
  where
   h : {n : ℕ} (k : Fin n) → A k
-  h zero    = {!!}
-  h (suc k) = {!!}
+  h zero    = a
+  h (suc k) = f k (Fin-elim A a f k)
 ```
 
 We give the other definition of the finite types and introduce some notation.
