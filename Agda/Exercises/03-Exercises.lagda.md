@@ -84,10 +84,10 @@ infix 0 _≅_
 Reformulate the same definition using Sigma-types.
 ```agda
 is-bijection' : {A B : Type} → (A → B) → Type
-is-bijection' f = {!!}
+is-bijection' f = Σ (λ g → (g ∘ f ∼ id) × (f ∘ g ∼ id))
 
 _≅'_ : Type → Type → Type
-A ≅' B = {!!}
+A ≅' B = Σ (λ (f : A → B) → is-bijection' f)
 ```
 The definition with `Σ` is probably more intuitive, but, as discussed above,
 the definition with a record is often easier to work with,
