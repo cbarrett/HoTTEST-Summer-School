@@ -115,26 +115,26 @@ Prove that 𝟚 and Bool are isomorphic
 
 ```agda
 Bool-𝟚-isomorphism : Bool ≅ 𝟚
-Bool-𝟚-isomorphism = record { bijection = {!!} ; bijectivity = {!!} }
+Bool-𝟚-isomorphism = record { bijection = f ; bijectivity = f-is-bijection }
  where
   f : Bool → 𝟚
-  f false = {!!}
-  f true  = {!!}
+  f false = 𝟎
+  f true  = 𝟏
 
   g : 𝟚 → Bool
-  g 𝟎 = {!!}
-  g 𝟏 = {!!}
+  g 𝟎 = false
+  g 𝟏 = true
 
   gf : g ∘ f ∼ id
-  gf true  = {!!}
-  gf false = {!!}
+  gf true  = refl true
+  gf false = refl false
 
   fg : f ∘ g ∼ id
-  fg 𝟎 = {!!}
-  fg 𝟏 = {!!}
+  fg 𝟎 = refl 𝟎
+  fg 𝟏 = refl 𝟏
 
   f-is-bijection : is-bijection f
-  f-is-bijection = record { inverse = {!!} ; η = {!!} ; ε = {!!} }
+  f-is-bijection = record { inverse = g ; η = gf ; ε = fg }
 ```
 
 
