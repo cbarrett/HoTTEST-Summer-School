@@ -43,13 +43,13 @@ can be inferred directly from the same operations on paths.
 Try to prove reflexivity, symmetry and transitivity of `_∼_` by filling these holes.
 ```agda
   ∼-refl : (f : (x : A) → B x) → f ∼ f
-  ∼-refl f = {!!}
+  ∼-refl f = λ x → refl (f x)
 
   ∼-inv : (f g : (x : A) → B x) → (f ∼ g) → (g ∼ f)
-  ∼-inv f g H x = {!!}
+  ∼-inv f g H x = sym (H x)
 
   ∼-concat : (f g h : (x : A) → B x) → f ∼ g → g ∼ h → f ∼ h
-  ∼-concat f g h H K x = {!!}
+  ∼-concat f g h H K x = trans (H x) (K x)
 
   infix 0 _∼_
 ```
