@@ -72,7 +72,8 @@ on the circle, i.e. sends the n-fold loop to the -n-fold loop.
 
 ```agda
 invert : S1 → S1
-invert = {!!}
+invert = S1-rec base (! loop)
+
 ```
 
 # Circles equivalence
