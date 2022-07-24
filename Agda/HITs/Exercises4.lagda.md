@@ -86,7 +86,7 @@ is homotopic to the identity on base and loop:
 
 ```agda
 to-from-base : from (to base) ≡ base
-to-from-base = {!!}
+to-from-base = refl _
 ```
 
 (⋆⋆⋆) 
