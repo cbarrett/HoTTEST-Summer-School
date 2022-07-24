@@ -40,16 +40,31 @@ path-between-paths-between-paths = {!!}
 # Functions are group homomorphism 
 
 (⋆⋆) State and prove a general lemma about what ap of a function on the
-inverse of a path (! p) does (see ap-∙ for inspiration).  
+inverse of a path (! p) does (see ap-∙ for inspiration).
+
+```agda
+ap-! : {A B : Type} {f : A → B} {x y : A} (p : x ≡ y)
+     → ap f (! p) ≡ ! (ap f p)
+ap-! {A} {B} {f} (refl x) = refl (refl (f x))
+```
 
 State and prove a general lemma about what ! (p ∙ q) is.  
+
+```agda
+!-distrib-∙ : {A : Type} {x y z : A} (p : x ≡ y) (q : y ≡ z)
+          → ! (p ∙ q) ≡ ! q ∙ ! p
+!-distrib-∙ (refl _) q =  ap (!) (∙unit-l q)
+```
 
 Use them to prove that the double function takes loop-inverse to
 loop-inverse concatenated with itself.
 
 ```agda
 double-!loop : ap double (! loop) ≡ ! loop ∙ ! loop
-double-!loop = {!!}
+double-!loop = ap double (! loop) ≡⟨ ap-! _ ⟩
+               ! (ap double loop) ≡⟨ ap (!) (S1-rec-loop _ _)  ⟩
+               ! (loop ∙ loop)    ≡⟨ !-distrib-∙ loop loop ⟩
+               ! loop ∙ ! loop ∎
 ```
 
 (⋆) Define a function invert : S1 → S1 such that (ap invert) inverts a path
