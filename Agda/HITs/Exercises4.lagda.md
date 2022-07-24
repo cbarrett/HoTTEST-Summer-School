@@ -17,10 +17,15 @@ a path-between-paths-between-paths between the two!
 
 ```agda
 homotopy1 : (loop ∙ ! loop) ∙ loop ≡ loop
-homotopy1 = {!!}
+homotopy1 =  loop ∙ ! loop ∙ loop ≡⟨ ap (λ H → H ∙ loop)  (!-inv-r loop) ⟩
+             refl base ∙ loop ≡⟨ ∙unit-l loop ⟩
+             loop ∎
 
 homotopy2 : (loop ∙ ! loop) ∙ loop ≡ loop
-homotopy2 = {!!}
+homotopy2 =  loop ∙ ! loop ∙ loop ≡⟨ ! (∙assoc loop (! loop) loop) ⟩
+             loop ∙ (! loop ∙ loop) ≡⟨ ap (λ H → loop ∙ H) (!-inv-l loop) ⟩
+             loop ∙ refl base ≡⟨ ∙unit-r loop ⟩
+             loop ∎
 ```
 
 (Harder exercise (🌶️): give a path between homotopy1 and
