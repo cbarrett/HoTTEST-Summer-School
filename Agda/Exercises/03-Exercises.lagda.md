@@ -247,7 +247,7 @@ Translate this definition into HoTT.
 
 ```agda
 is-lower-bound : (P : ℕ → Type) (n : ℕ) → Type
-is-lower-bound P n = {!!}
+is-lower-bound P n = (m : ℕ) → P(m) → n ≤₁ m
 ```
 
 We define the type of minimal elements of a type family over the naturals.
