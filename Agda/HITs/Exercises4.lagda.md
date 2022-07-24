@@ -93,7 +93,12 @@ to-from-base = refl _
 
 ```
 to-from-loop : ap from (ap to loop) ≡ loop
-to-from-loop = {!!}
+to-from-loop = ap from (ap to loop) ≡⟨ ap (λ H → ap from H) (S1-rec-loop _ _) ⟩
+               ap from (east ∙ ! west) ≡⟨ ap-∙ east (! west)  ⟩
+               ap from east ∙ ap from (! west) ≡⟨ ap₂ (λ p q → p ∙ q) (Circle2-rec-east _ _ _ loop) (ap-! west) ⟩
+               loop ∙ ! (ap from west) ≡⟨ ap (λ H → loop ∙ ! H) (Circle2-rec-west _ _ (refl base) _) ⟩
+               loop ∙ (refl base) ≡⟨ ∙unit-r loop ⟩
+               loop ∎
 ```
 
 Note: the problems below here are progressively more optional, so if you
