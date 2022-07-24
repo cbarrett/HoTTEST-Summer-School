@@ -234,9 +234,9 @@ Give the recursive definition of the less than or equals relation on the natural
 
 ```agda
 _≤₁_ : ℕ → ℕ → Type
-0     ≤₁ y     = {!!}
-suc x ≤₁ 0     = {!!}
-suc x ≤₁ suc y = {!!}
+0     ≤₁ y     = 𝟙
+suc x ≤₁ 0     = 𝟘
+suc x ≤₁ suc y = x ≤₁ y
 ```
 
 ### Exercise 7 (⋆)
