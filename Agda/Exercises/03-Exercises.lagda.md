@@ -261,7 +261,8 @@ minimal-element P = Σ n ꞉ ℕ , (P n) × (is-lower-bound P n)
 Prove that all numbers are at least as large as zero.
 ```agda
 leq-zero : (n : ℕ) → 0 ≤₁ n
-leq-zero n = {!!}
+leq-zero zero = ⋆
+leq-zero (suc _) = ⋆
 ```
 
 
