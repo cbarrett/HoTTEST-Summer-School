@@ -21,10 +21,13 @@ these items up as an equivalence S1 ≃ Circle2.
 
 ```agda
 to-from : (x : S1) → from (to x) ≡ x
-to-from = {!!}
+to-from = S1-elim _ to-from-base help
+  where
+    help : PathOver _ loop to-from-base to-from-base
+    help = PathOver-roundtrip≡ from to loop (∙unit-l _ ∙ to-from-loop)
 
 circles-equivalent : S1 ≃ Circle2
-circles-equivalent = {!!}
+circles-equivalent = improve (Isomorphism to (Inverse from to-from from-to))
 ```
 
 # Reversing the circle (⋆⋆) 
@@ -34,15 +37,33 @@ i.e. sends loop to ! loop.
 
 ```agda
 rev : S1 → S1
-rev = {!!}
+rev = S1-rec base (! loop)
 ```
 
 Prove that rev is an equivalence.  Hint: you will need to state and prove
 one new generalized "path algebra" lemma and to use one of the lemmas from
 the "Functions are group homomorphism" section of Lecture 4's exercises.  
 ```agda
+
+rev-inv : ap rev loop ≡ ! loop
+rev-inv = S1-rec-loop base (! loop)
+
+double-! : {A : Type} {x y : A} (p : x ≡ y) → ! (! p) ≡ p
+double-! (refl _) = refl (refl _)
+
 rev-equiv : is-equiv rev
-rev-equiv = {!!}
+rev-equiv = Inverse rev help rev help
+  where
+    help₂ : ap rev (ap rev loop) ≡ loop
+    help₂ = ap rev (ap rev loop) ≡⟨ ap (ap rev) rev-inv ⟩
+            ap rev (! loop)      ≡⟨ ap-! loop ⟩
+            ! (ap rev loop)      ≡⟨ ap ! rev-inv ⟩
+            ! (! loop)           ≡⟨ double-! loop ⟩
+            loop ∎
+    help₁ : PathOver (λ x → (rev (rev x)) ≡ x) loop _ _
+    help₁ = PathOver-roundtrip≡ rev rev loop (∙unit-l _ ∙ help₂)
+    help : (rev ∘ rev) ∼ id
+    help = S1-elim _ (refl base) help₁
 ```
 
 
