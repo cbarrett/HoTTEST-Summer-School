@@ -454,7 +454,7 @@ is defined by induction on $m,n : \bN$ from the base case $\gamma(0,0, \star) \c
 
 In the inductive step we seek an identification $\gamma(m+1,n+1,e) : (m+1, \term{refl-Eq}_\bN(m+1)) = (n+1,e)$. To define this we use the map
 \[ \lambda(n,e).(n+1,e) : \sum_{n:\bN}\Eq_\bN(m,n) \to \sum_{n : \bN}\Eq_\bN(m+1,n).\]
-Since this map carries $(m,\term{refl-Eq}_\bN(m))$ to $(m+1,\term{refl-Eq}_\bN(m+1))$ we can apply the map to the identification $(m,n,e)$ to get the identification we seek.
+Since this map carries $(m,\term{refl-Eq}_\bN(m))$ to $(m+1,\term{refl-Eq}_\bN(m+1))$, $\ap_{ \lambda(n,e).(n+1,e)}\gamma(m,n,e)$ provides the identification we seek.
 \end{proof}
 
 \begin{exc} Peano's axioms for the natural numbers assert that:
@@ -500,7 +500,7 @@ This last type is contractible so the first type is as claimed. Chasing through 
 
 By the fundamental theorem of identity types, this establishes the desired family of equivalences of types.
 
-\subsection*{Embeddings}
+\section*{Embeddings}
 
 Our next application will show that equivalences are embeddings, defined as follows:
 
@@ -530,9 +530,26 @@ We suggest a final exercise, a repeat of an exercise that appeared on a previous
 
 \part*{August 1: Propositions, sets, and general truncation levels}
 
-We now formally study propositions in homotopy type theory.
+Topologists are familiar with various spaces built by attaching cells. These cell complexes can also be described in homotopy type theory as higher inductive types.
+
+For instance, we have types like $\emptyset$, $\1$, and $\1+\1$, which are built by freely adding points.
+
+The circle $S^1$ can be built by freely attaching a basepoint and then a loop identifying the basepoint with itself. 
+
+Higher dimensional spheres can be built analogously: the 2-sphere is defined by attaching a free 2-dimensional loop from $\refl_\base$ to itself, while the 3-sphere is defined by attaching a free 3-dimensional loop from $\refl_{\refl_\base}$ to itself, and so on.
+
+Other spaces that can be formed as cell complexes include the torus $T$, which is built from one point, two loops $a$ and $b$, and a 2-dimensional path from $a \cdot b \cdot a^{-1} \cdot b^{-1}$ to $\refl$. Certain spaces, like $\mathbb{R}P^\infty$ and $\mathbb{C}P^\infty$, require cells in arbitrarily large dimensions.
+
+Today we will introduce a hierarchy that classifies all types according to their truncation level, which recovers the topological characterization of ``homotopy $n$-types.'' Note that being truncated at level $n$ does \emph{not} correspond to the naive notion of having ``dimension $n$.'' While the types $\emptyset$, $\1$, and $\1+\1$ are all 0-types, as one might expect, the types $S^1$, $T$, and $\mathbb{R}P^\infty$ are all 1-types, even though the latter are built using higher cells. The type $\mathbb{C}P^\infty$ is a 2-type, but $S^2$ is not. Indeed, only the lowest dimensional spheres $S^0$ and $S^1$ have finite truncation levels.
+
+Finally, as we will learn, homotopy type theory extends this hierarchy downwards: $\emptyset$ and $\1$ are both -1-types, aka \emph{propositions}, while $\1$ is also a -2-type, aka contractible.  
 
 \section*{Propositions}
+
+Recall a type $A$ is \textbf{contractible} if it has a term of type
+\[ \iscontr{A} \coloneq \Sigma_{c :A}\Pi_{x:A} c =x.\]
+
+We now formally study propositions in homotopy type theory.
 
 \begin{defn} A type $A$ is a \textbf{proposition} if all of its identity types are contractible: i.e., if it comes with a term of type
 \[ \is{prop}(A) \coloneq \prod_{x,y:A} \is{contr}(x=y).\]
@@ -571,6 +588,16 @@ because then we can use this function $f$ applied to one of the two terms $x,y :
 Finally, if $\term{const}_\star : A \to \1$ is an embedding, then the types $(x=y)$ and $(\star=\star)$ are equivalent. The latter type is contractible so the former must be as well. This proves that (iv) implies (i).
 \end{proof}
 
+The final step of the proof relied on the fact that the notion of contractibility is invariant under equivalence of types. The same is true for the propositions:
+
+\begin{lem} Suppose $e : A\simeq B$. Then
+\[ \isprop{A} \iff \isprop{B}.\]
+\end{lem}
+
+\begin{proof}
+Since $e$ is an equivalence, $e$ is an embedding, meaning that $\ap_e : (x=_Ay) \to (e(x)=_B e(y))$ is an equivalence. Now if $B$ is a proposition then $(e(x)=_Be(y))$ is contractible which then implies that $(x=_Ay)$ is contractible. Thus $\isprop(B) \to \isprop(A)$. The converse is proven similarly using the inverse equivalence to $e$.
+\end{proof}
+
 A useful feature of propositions is that logical equivalences become equivalences:
 
 \begin{prop} For propositions $P$ and $Q$
@@ -580,15 +607,7 @@ A useful feature of propositions is that logical equivalences become equivalence
 Clearly we have $(P \simeq Q) \to (P \iff Q)$ so the content is in the converse. Given $f : P \to Q$ and $g : Q \to P$ we obtain homotopies $f \circ g \sim \id$ and $g \circ f \sim \id$ using the fact that any two elements in $P$ and $Q$ can be identified. Thus, $f$ and $g$ are equivalence inverses.
 \end{proof}
 
-Furthermore, the property of being a proposition is equivalence invariant:
 
-\begin{lem} Suppose $e : A\simeq B$. Then
-\[ \isprop{A} \iff \isprop{B}.\]
-\end{lem}
-
-\begin{proof}
-Since $e$ is an equivalence, $e$ is an embedding, meaning that $\ap_e : (x=_Ay) \to (e(x)=_B e(y))$ is an equivalence. Now if $B$ is a proposition then $(e(x)=_Be(y))$ is contractible which then implies that $(x=_Ay)$ is contractible. Thus $\isprop(B) \to \isprop(A)$. The converse is proven similarly using the inverse equivalence to $e$.
-\end{proof}
 
 
 \section*{Sets}
@@ -653,7 +672,10 @@ So far we have defined:
 \isprop(A) &\coloneq \prod_{x,y:A} \iscontr(x=y) \\
 \is{set}(A) &\coloneq \prod_{x,y:A} \isprop(x=y)
 \end{align*}
-These define the first few layers of the hierarchy of truncation levels. This hierarchy starts at level -2 with the contractible types and continues at level -1 with the propositions. This makes level 0 the sets, which are typically thought of as ``0-dimensional.''
+The is an obvious pattern here that we might continue, with the next definition being $\prod_{x,y:A} \is{set}(x=y)$. But what do we call this?
+
+These predicates define the first few layers of the hierarchy of truncation levels. Sets, are often thought of as ``0-dimensional,'' so they form level 0 of the hierarchy. The propositions then live at level -1 and contractible types are at level -2. The next level in the hierarchy defines the 1-types $\is{1-type}(A) \coloneq\prod_{x,y:A} \is{set}(x=y)$.
+
 
 Let $\bT$ be the inductive type with constructors $-2_\bT : \bT$ and $\term{succ}_\bT : \bT \to \bT$. The natural inclusion $i \colon \bN \to \bT$ is defined recursively by $i(0_\bN) \coloneq \term{succ}_\bT (\term{succ}_\bT (-2_\bT))$ and $i(\suc(n)) \coloneq \term{succ}_\bT (i(n))$. We abbreviate by writing $-2,-1,0,1,2,\ldots$ for the first few terms of $\bT$ when the context is clear.
 
@@ -687,9 +709,11 @@ In particular:
 
 General truncation levels are stable under equivalence:
 
-\begin{prop} If $e : A \simeq B$ and $B$ is a $k$-type so is $A$.
-\end{prop}
+\begin{lem} If $e : A \simeq B$ then $\is{trunc}_k A \iff \is{trunc}_kB$.
+\end{lem}
 \begin{proof}
+As before we show that if $B$ is a $k$-type then so is $A$. The converse follows by using $(A \simeq B) \to (B \simeq A)$. We prove this by induction on $k : \bT$.
+
 We know this for contractible types, which is the base case. For the inductive step, $e: A \simeq B$ provides an equivalence $\ap_e :(x=y) \to (e(x)=e(y))$ for any $x,y:A$. If $B$ is a $k+1$-type its identity types are $k$-types so the inductive hypothesis implies that $(x=y)$ is also a $k$-type. This proves that $A$ is a $k+1$-type.
 \end{proof}
 
@@ -717,10 +741,18 @@ We'll show that for subtypes $B$ over $A$ the map $\pr_1 \colon \sum_{x:A} B(x) 
 \end{enumerate}
 \end{thm}
 \begin{proof}
-By the fundamental theorem of identity types, $f$ is an embedding if and only if $\sum_{x:A}f(x)=_B f(y)$ is contractible for each $y :A$. Thus $f$ is an embedding iff $\fib_f(f(y))$ is contractible for each $y : A$. If $b:B$ and $p : f(y) = b$ then transport defines an equivalence
-\[ \fib_f(f(y)) \simeq \fib_f(b).\]
-Thus $f$ is an embedding iff $\fib_f(b)$ is contractible for each $b : B$ equipped with $p : f(y) = b$ for some $y:A$. This latter condition may be re-expressed as \[ \fib_f(b) \to \iscontr(\fib_f(b)),\]
-which asserts that each $\fib_f(b)$ is a proposition.
+By the fundamental theorem of identity types, $f$ is an embedding if and only if $\sum_{x:A}f(x)=_B f(y)$ is contractible for each $y :A$. This is the fiber of $f$ over the point $f(y) : B$. Thus condition (i) is logically equivalent to:\\
+\indent {\em (i')} $\fib_f(f(a))$ is contractible for each $a : A$.\\
+At the same time, by our logically equivalent ways of characterizing the propositions, (ii) is logically equivalent to:
+\\
+\indent {\em (ii')} $\fib_f(b) \to \iscontr{(\fib_f(b))}$ for all $b : B$.\\
+We'll prove that (i') and (ii') are logically equivalent.
+
+Assume (i'). let $b : B$, and suppose $\fib_f(b)$ holds, which by $\Sigma$-induction provides terms $x:A$ and $p : f(x) = b$. By (i'), $\fib_ff(x)$ is contractible and transport along $p$ then defines an equivalence
+\[ \fib_f(f(x)) \simeq \fib_f(b).\]
+Thus $\fib_f(b)$ must be contractible as well, proving (ii').
+
+Now assume (ii') and let $a : A$. By our assumption (ii'), to show that $\fib_f(f(a))$ is contractible it suffices to show that it is inhabited, which we do with the pair $(a, \refl_{f(a)})$.
 \end{proof}
 
 \begin{cor} For any family $B : A \to \UU$ the following are logically equivalent:
@@ -761,6 +793,45 @@ For the converse, we have an equivalence between $\fib_{\ap_f}(p)$ and the ident
 
 
 \part*{August 5: Function extensionality \& Universal properties}
+
+Let $A$, $B$, and $C$ be types. It is natural to ask whether the types
+\[ (A \times B \to C) \qquad \text{and} \qquad (A \to B \to C)\]
+are equivalent, perhaps via ``currying'' and ``uncurrying''?
+
+Without too much difficulty, we can construct a logical equivalence between these types. One of these maps is
+\[ \term{ev-pair} : (A \times B \to C) \to (A \to B \to C)\] defined by
+ $(\term{ev-pair} g)(a,b) \coloneq g(a,b)$. Note this definition uses the introduction rule
+\[ (\_,\_) : A \to B \to A \times B\]
+for product types. In the other direction we have
+\[ \ind_\times : (A \to B \to C) \to (A \times B \to C)\]
+defined by the elimination rule for product types. Recall that this can be expressed in terms of an induction principle for any type family $x : A, y : B \vdash P(x,y)$, in the form of a map
+\[ \ind_\times : \left( \Pi_{x:A} \Pi_{y: B} P(x,y) \right) \to \left( \Pi_{p: A \times B} P(p) \right).\]
+This specializes to the map we need in the case of a constant type family.
+
+It remains to show that $\term{ev-pair}$ and $\ind_\times$ are inverse equivalences. To show that $\term{ev-pair} \circ \ind_\times \simeq \id$ we must construct an identification
+\[ \term{ev-pair} (\ind_\times f) =_{A \to B \to C} f\]
+for each $f : A \to B \to C$. For any $a : A$ and $b : B$ we know that
+\[ (\term{ev-pair} (\ind_\times f))(a,b) \doteq (\ind_\times f)(a,b) \doteq f(a,b),\]
+by the definition of $\term{ev-pair}$ and by the computation rule for product types. Thus by the $\eta$-rule for function types,
+\[
+    \term{ev-pair} (\ind_\times f) \doteq \lambda a \lambda b. f(a,b) \doteq f\]
+Thus $\refl$ defines an identification
+\[ \refl : \term{ev-pair} (\ind_\times f) =_{A \to B \to C} f.\]
+
+For the other homotopy $\ind_\times \circ \term{ev-pair} \simeq \id$ we must construct an identification
+\[ \ind_\times (\term{ev-pair} g) =_{A \times B \to C} g
+    \]
+for each $g : A \times B \to C$. Here we can't compute the value of of the left hand side at a generic term $p : A \times B$ but in the case of a pair $(a,b) : A \times B$ we do have definitional equalities
+\[ (\ind_\times (\term{ev-pair} g))(a,b) \doteq g(a,b).\] Thus $\refl$ defines a term
+\[ \lambda a. \lambda b. \refl : \Pi_{a:A} \Pi_{b : B} (\ind_\times (\term{ev-pair} g))(a,b) = g(a,b).\]
+By the induction principle for product types, we have a map
+\[ \ind_\times : \left(  \Pi_{a:A} \Pi_{b : B} (\ind_\times (\term{ev-pair} g))(a,b) = g(a,b) \right) \to \left( \Pi_{p : A \times B} (\ind_\times (\term{ev-pair}g))p = g(p) \right).\]
+Thus, we have a homotopy
+\[\ind_\times(\lambda a. \lambda b. \refl) : \ind_\times (\term{ev-pair}g) \sim g. \]
+However, we require an identification $\ind_\times (\term{ev-pair}g) = g$ and we do not have a mechanism to promote homotopies to identifications between functions. So our proof gets stuck here.
+
+We'll be able to complete this argument in the presence of the \textbf{function extensionality} axiom, which asserts that the canonical map that converts an identification between functions into a homotopy is a family of equivalences of types.
+
 
 
 \section*{Function extensionality}
@@ -840,9 +911,9 @@ For a non-dependent family we conclude that:
 In particular, $\neg A$ is a proposition for any type $A$!
 
 
-\section*{The type theoretic axiom of choice}
+\section*{The type theoretic principle of choice}
 
-There's a result that's sometimes called the ``type theoretic axiom of choice'' that is just true, asserting that $\Pi$-types distribute over $\Sigma$-types. We'll now give a proof.
+There's a result that's sometimes called the ``type theoretic principle of choice'' that is just true, asserting that $\Pi$-types distribute over $\Sigma$-types. Without function extensionality we can give a logical equivalence between the following types, but we can now show that it is a full equivalence.
 
 \begin{thm} For any family of types $x :A, y : B(x) \vdash C(x,y) \univ$ the map
 \[ \term{choice} : \left(\prod_{x:A}\sum_{y:B(x)}C(x,y) \right) \to \left( \sum_{f: \prod_{x:A}B(x)} \prod_{x:A} C(x,f(x))\right)\]
@@ -866,6 +937,8 @@ For the second homotopy, we require an identification $\term{choice}^{-1}(\term{
 We do not have a definitional equality relating $h(x)$ and $(\pr_1(h(x)), \pr_2(h(x)))$ but in our characterization of the identity type of $\Sigma$-types we do have an identification between them called $\term{eq-pair}(\refl,\refl)$. By function extensionality, the homotopy $\lambda x. \term{eq-pair}(\refl,\refl) : \term{choice}^{-1}(\term{choice}(h))\sim h$ can be turned into an identification and thus a homotopy $\term{choice}^{-1} \circ \term{choice} \sim \id$.
 \end{proof}
 
+With function extensionality, the rules for the other inductive types can similarly be expressed as universal properties that characterize the type of dependent functions out of a particular type. One map of the equivalence is defined by evaluating at the constructors, while the other is given by the induction principle. The computation rule shows that the induction map is a section of the evaluation map, and the remaining required homotopy can also be constructed from this computation rule, combined with function extensionality.
+
 \section*{Universal properties}
 
 More generally, the function extensionality axiom allows us to prove universal properties, which characterize maps out of or into a given type, and characterize that type up to equivalence. Some examples follow.
@@ -882,12 +955,12 @@ given by $f \mapsto \lambda x.\lambda y. f(x,y)$ is an equivalence
 \begin{proof}
 The inverse map is given by the induction principle for $\Sigma$-types:
 \[ \ind_\Sigma : \left( \prod_{x:A}\prod_{y:B(x)} C(x,y) \right) \to \left( \prod_{z: \sum_{x:A}B(x)} C(z) \right) .\]
-By the computation rule for $\Sigma$ types, we have the homotopy
+By the computation rules for $\Sigma$ types and $\Pi$ types, we have the homotopy
 \[ \term{refl-htpy} : \term{ev-pair} \circ\ind_\Sigma \sim \id,\]
 which shows that $\ind_\Sigma$ is a section of $\term{ev-pair}$.
 
 Function extensionality is used to construct the other homotopy. To define a homotopy $\ind_\Sigma \circ \term{ev-pair} \sim \id$ requires identifications $\ind_\Sigma(\lambda x. \lambda y. f(x,y)) = f$. By function extensionality it suffices to show that
-\[ \prod_{z: \sum_{x:A}B(x)} \ind_\Sigma(\lambda x. \lambda y. f(x,y))(t) = f(t).\] By $\Sigma$-induction it suffices to prove this for pairs in which case we require identifications
+\[ \prod_{z: \sum_{x:A}B(x)} \ind_\Sigma(\lambda x. \lambda y. f(x,y))(z) = f(z).\] By $\Sigma$-induction it suffices to prove this for pairs in which case we require identifications
 \[ \ind_\Sigma(\lambda x. \lambda y. f(x,y))(a,b) = f(a,b),\]
 but this holds definitionally by the computation rule for $\Sigma$ types.
 \end{proof}
@@ -899,7 +972,7 @@ In the non-dependent case we have as a corollary:
 given by $f \mapsto \lambda a. \lambda b. f(a,b)$ is an equivalence. \qed
 \end{cor}
 
-\subsection*{The universal property of identity types}
+\section*{The universal property of identity types}
 
 The universal property for identity types can be understood as an (undirected) type theoretic version of the Yoneda lemma. In the most familiar case, when $B$ is a type family over $A$, it says that the map
 \[ \term{ev-refl} : \left( \prod_{x:A}(a=x) \to B(x) \right) \to B(a)\]
@@ -920,7 +993,7 @@ $\pathind_a(f(a,\refl_a)) = f$ we apply function extensionality twice so that it
 \end{proof}
 
 \begin{comment}
-\subsection*{Composing with equivalences}
+\section*{Composing with equivalences}
 
 Another useful consequence is the fact that $f : A \to B$ is an equivalence if and only if precomposing with $f$ is an equivalence.
 
@@ -948,7 +1021,7 @@ over $f$. We have $(\id_B,\refl_f)$ in this fiber but also the point $(f \circ h
 Thus, it remains to prove that (i) implies (ii) which is the hard part. The first step is to promote the equivalence $f$ to a coherently invertible equivalence, involving $g : B \to A$, homopies $G$ and $H$, and a higher homotopy $K : G \cdot f \sim f \cdot H$. We leave the details to \cite[13.4.1]{Rijke}.
 \end{proof}
 
-\subsection*{The strong induction principle of \texorpdfstring{$\bN$}{the natural numbers}}
+\section*{The strong induction principle of \texorpdfstring{$\bN$}{the natural numbers}}
 
 A final application of function extensionality is to prove the strong induction principle for the natural numbers. We give the statement and leave the proof to \cite[\S13.5]{Rijke}. Function extensionality is needed to give the computation rules.
 
@@ -961,13 +1034,14 @@ so that $\term{strong-ind}_\bN(p_0,p_S,0)  = 0$ and
 \end{thm}
 \end{comment}
 
-\subsection*{Univalence}
+\section*{Univalence}
 
 We have now characterized the identity types of every family of types that we have introduced with a single exception. It remains to identify the identity types of the universe $\UU$. As with the case of identity types of dependent function types, we cannot prove a characterization in type theory. Instead, we need an axiom. What differentiates \emph{homotopy} type theory from Martin-L\"{o}f's dependent type theory is our adoption of Voevodsky's \emph{univalence axiom} for this purpose.
 
 \begin{defn} A universe
 $\UU$ is \textbf{univalent} if for any $A, B : \UU$, the map
-\[ \term{equiv-eq} : (A = B) \to (A \simeq B)\]
+\[ \term{equiv-id} : (A = B) \to (A \simeq B)\]
+defined by path induction by sending $\refl_A$ to the identity equivalence is an equivalence.
 \end{defn}
 
 In other words, univalence asserts that the family $\lambda A,\lambda B, A \simeq B : \UU \to \UU \to \UU$ with the identity equivalences gives an identity system for $\UU$.
@@ -975,7 +1049,7 @@ In other words, univalence asserts that the family $\lambda A,\lambda B, A \sime
 \begin{exc} Apply the fundamental theorem of identity types, to obtain various equivalent forms of the univalence axiom.
 \end{exc}
 
-As Voevodsky first observed, univalence implies function extensionality, through a non-obvious proof. So the applications we've seen of function extensionality, to prove various universal properties, can also be understood as consequence of the univalence axiom.
+As Voevodsky first observed, univalence implies function extensionality, through a non-obvious proof. So the applications we've seen of function extensionality, to prove various universal properties, can also be understood as consequence of the univalence axiom. But there are myriad other consequences of univalence as we shall soon discover.
 
 
 \bibliographystyle{alpha}
